@@ -1,0 +1,13 @@
+/* pages/orderdetail/orderdetail.wxss */
+.orderlist{}
+.orderstoreinfo{padding:20rpx 30rpx;color:#999;}
+.storeimg{width:40rpx;height: 40rpx;border-radius: 100%;vertical-align: middle;margin-right: 4rpx;}
+.orderstate{text-align: right;line-height: 40rpx;}
+.order_total{padding:30rpx;color:#333;}
+.orderprd_list{padding:20rpx 30rpx;color:#999;}
+.orderprd_list .orderprd_price{width:140rpx;text-align: right;}
+.orderprd_list .orderprd_num{width:60rpx;padding-left: 20rpx;}
+.weui-form-preview{margin-top:20rpx;}
+.weui-form-preview .weui-form-preview__bd,.weui-form-preview .weui-form-preview__value{font-size: 28rpx;}
+.page__bd_spacing{padding:40rpx 30rpx 20rpx;}
+

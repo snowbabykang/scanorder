@@ -1,0 +1,28 @@
+<!--pages/paysuccess/paysuccess.wxml-->
+<view class="page">
+    <view class="weui-msg">
+        <view class="weui-msg__icon-area">
+            <icon type="success" size="30"></icon> <text style="padding-left:16rpx;font-size:32rpx;">支付成功</text>
+            <view style="font-size:70rpx;padding-top:16rpx;">￥0.00</view>
+        </view>
+        <view class="weui-msg__text-area">
+            
+        </view>
+    </view>
+    <view class="weui-cells">
+      <view class="weui-cell">
+          <view class="weui-cell__bd"><text class="infotitle">支付方式</text></view>
+          <view class="weui-cell__ft"><text class="primary">￥100.00</text></view>
+      </view>
+      <view class="weui-cell weui-cell_access">
+          <view class="weui-cell__bd"><text class="infotitle">订单编号</text>1234567890</view>
+          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </view>
+    </view>
+    <view class="extra_info">去看看您的 <navigator url="" class="btn-link">付款记录</navigator></view>
+    <view class="weui-msg__extra-area">
+        <view class="weui-footer">
+            <view class="weui-footer__text"> ©2017 优物库提供技术服务</view>
+        </view>
+    </view>
+</view>

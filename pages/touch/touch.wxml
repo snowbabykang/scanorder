@@ -1,0 +1,15 @@
+<view class="address-item " wx:for="{{addressList}}" >
+   <!--这里绑定了刚才说的3个函数分别为 touchS，touchM touchE-->
+    <!--这里注意这个  style="{{item.txtStyle}}" ，这是我们一会再js中 将要设置的样式 -->
+        <view style="{{item.txtStyle}}"  bindtouchstart="touchS" bindtouchmove="touchM" bindtouchend="touchE"  data-index="{{index}}"  class="address-item-top" >
+         <!--中间无关的代码已被我删除-->
+         地址地址地址
+        </view>
+
+         <!--这里是左滑按钮部分----start-->
+        <view bindtap="delItem" class="posit">
+            <view class="editor" data-addressid="{{item.address.ID}}" catchtap="setDefaultAddress">设为默认地址</view>
+            <view class="del" data-addressid="{{item.address.ID}}" data-index="{{index}}" catchtap="delAddress">删除</view>
+        </view>
+         <!--这里是左滑按钮部分----end-->
+    </view>

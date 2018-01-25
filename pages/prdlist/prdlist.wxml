@@ -1,0 +1,139 @@
+<import src="../../toast/wetoast.wxml"/>
+<template is="wetoast" data="{{...__wetoast__}}"/>
+
+<view class="page">
+  <view class="content">
+    <!-- 头部导航 --- S -->
+    <view class="cont-head bg_liner_orange weui-cell">
+      <view class="weui-cell__hd">
+        <view class="storelogo"><image src="{{store.logo}}" mode="aspectFit" binderror="errorFunction"></image></view>
+      </view>
+      <view class="weui-cell__bd storename">{{store.name}}</view>
+      <navigator class="myorder" url="../orderlist/orderlist">
+        <image src="../../images/myorder.png"></image>
+      </navigator>
+    </view>
+    <!-- 头部导航 --- E -->
+    <view class="weui-flex cont-main">
+      <view class="left-cont">
+        <scroll-view class="menu_list" scroll-y>
+          <view class="weui-cell select-list {{cur_classfiy.catid == item.id? 'active' : ''}}" wx:for="{{classfiys}}" wx:key="id" data-cid="{{item.id}}" data-name="{{item.listname}}" data-index="{{index}}" bindtap="changeclassifyprd">
+            <view class="listname"> {{item.listname}}</view>
+          </view>
+        </scroll-view>
+      </view>
+      <view class="weui-flex__item right-cont">
+          <scroll-view scroll-y style="height: 100%" lower-threshold="100" bindscrolltolower="prdScrollLower">  
+            <view class="prd_list" wx:if="{{showprdlist}}">
+              <view class="weui-media-box weui-media-box_appmsg prdlist_item" wx:for="{{prdlist}}" wx:key="prd_id" data-id="{{item.prd_id}}">
+                  <view class="weui-media-box__hd weui-media-box__hd_in-appmsg prdimg">
+                      <image class="weui-media-box__thumb" src="{{item.prd_info.pic_url}}" mode="aspectFit" binderror="errorFunction"/>
+                  </view>
+                  <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+                      <view class="weui-media-box__title item-subtitle">{{item.prd_info.title}}</view>
+                      <view class="weui-flex">
+                        <view class="primary prdprice">
+                          <sub>￥</sub><i class="">{{item.prd_info.price}}</i>
+                        </view>
+                        <view class="weui-flex__item">
+                          <view class="prdcart">
+                            <view class="minusnumbtn  {{buyData_obj[item.prd_id].is_moresku ? 'disabled' : ''}}" wx:if="{{buyData_obj[item.prd_id].num}}"  bindtap="change_cart" data-type="remove" data-prdid="{{item.prd_id}}" data-hassku="0">-</view>
+                            <view class="prdcartnum" wx:if="{{buyData_obj[item.prd_id].num}}">{{buyData_obj[item.prd_id].num}}</view>
+                            <view class="addnumbtn bg_liner_orange"  bindtap="change_cart" data-type="add" data-prdid="{{item.prd_id}}" data-hassku="0">+</view>
+                          </view>
+                        </view>
+                      </view>
+                  </view>
+              </view>
+              
+            </view>
+            <!-- 暂无数据 ---S-->
+            <view wx:else class="weui-msg">
+              <view class="weui-msg__icon-area">
+                  <icon type="warn" size="70"></icon>
+              </view>
+              <view class="weui-msg__text-area">
+                  <view class="weui-msg__desc" style="font-size:14px;">该分类下暂无商品记录</view>
+              </view>
+            </view>
+            <!-- 暂无数据 ---E-->
+          </scroll-view>
+      </view>
+    </view>
+  </view>
+  <!-- 底部导航 --- S -->
+  <view id="footer_nav" class="{{showfooter ? 'show' : ''}}">
+    <view class="footernav weui-flex">
+        <view class="weui-flex__item">
+            <view class="allprice"><sub>共￥</sub>{{total_fee}}</view>
+        </view>
+        <view class="{{cartNum ? 'bg_liner_orange' : 'bg_liner_gray'}}" style="width:200rpx">
+            <view class="buy_btn" bindtap="confirmoder">待结算</view>
+        </view>
+    </view>
+    <view class="popup-mask {{showfooter ? 'in' : 'out'}}" bindtap="showfooternav"></view>
+    <!-- 已加入购物车列表 --- S -->
+    <view class="cartprdbox slideUpAnimate {{showfooter ? 'in' : 'out'}}">
+      <view class="cartnumbox {{cartNum ? 'bg_liner_orange' : 'bg_liner_gray'}}" bindtap="showfooternav">
+          <view class="cartnum {{cartNum ? 'bg_liner_orange' : 'bg_liner_gray'}}" wx:if="{{cartNum}}">{{cartNum}}</view>
+          <view class="orderfood_icon"><image src="../../images/orderfood.png"></image></view>
+      </view>
+      <view class="cartprdlists " >
+          <view class="weui-cell list_title">
+            <view class="weui-cell__bd">已选餐品</view>
+            <view class="weui-cell__ft" bindtap="removeBuyData">清空全部</view>
+          </view>
+          <view class="prdlists">
+            <view class="weui-cell prdlists_item" wx:for="{{buyData_arr}}" wx:key="skuid" data-prdid="{{item.num_iid}}">
+              <view class="weui-cell__bd">
+                <view class="cartlist_title">{{item.title}}</view>
+                <view class="cartlist_sku" wx:for="{{item.sku_alias}}" wx:for-item="sku" wx:key="val">{{sku.name}}；</view>
+              </view>
+              <view class="cartlist_price">￥{{item.price*item.num}}</view>
+              <view class="weui-cell__ft">
+                <view class="minusnumbtn" bindtap="change_cart" data-type="remove" data-prdid="{{item.num_iid}}" data-skuid="{{item.skuid}}" data-iscart="1">-</view>
+                <view class="prdcartnum">{{item.num}}</view>
+                <view class="addnumbtn bg_liner_orange" bindtap="change_cart" data-type="add" data-prdid="{{item.num_iid}}" data-skuid="{{item.skuid}}" data-iscart="1">+</view>
+              </view>
+            </view>
+          </view>
+      </view>
+    </view>
+    <!-- 已加入购物车列表 --- E -->
+  </view>
+  <!-- 底部导航 --- E -->
+  <!-- 选择sku --- S -->
+  <view class="moreskubox" hidden="{{!showskubox}}">
+    <view class="popup-mask {{showskubox ? 'in' : 'out'}}" bindtap='hideskubox'></view>
+    <view class="skucontent slideUpAnimate {{showskubox ? 'in' : 'out'}}">
+      <view class="prdtitle">{{prdData[cur_prdid].title}}</view>
+      <view class="prdclassfiy">（{{cur_classfiy.name}}）</view>
+      <view class="sku_cont" wx:for="{{prdData[cur_prdid].propertie_arr}}" wx:key="index">
+        <view class="cont-title">{{item}}</view>
+        <radio-group class="radio-group" bindchange="skuChange" data-name="{{item}}" data-prdid="{{cur_prdid}}" data-propertie="sku{{index+1}}">
+          <label class="radio border {{sku.checked ? 'active' : ''}}" 
+            wx:for="{{prdData[cur_prdid].property_alias_obj}}" wx:for-item="sku" wx:for-index="single" wx:key="val" wx:if="{{sku.typename == item}}">
+            <radio value="{{single}}" hidden checked="{{sku.checked}}"/>{{sku.val}}
+          </label>
+        </radio-group>
+      </view>
+      <view class="weui-flex">
+        <view class="weui-flex__item">
+          <view class="primary prdprice" wx:if="{{cur_sku_info.price}}"><sub>￥</sub>{{cur_sku_info.price}}</view>
+          <view class="primary prdprice" wx:else><sub>￥</sub>{{prdData[cur_prdid].price}}</view>
+          <!-- <view class="prdnum" wx:if="{{cur_sku_info.quantity}}">（库存：{{cur_sku_info.quantity}}）</view>
+          <view class="prdnum" wx:else>（库存：{{prdData[cur_prdid].prd_num}}）</view> -->
+        </view>
+        <view class="prdcart" style="padding-top:12rpx;">
+          <view class="minusnumbtn {{cur_addsku_num && cur_addsku_num >= 2 ? '' : 'disabled'}}"  bindtap="change_skunum" data-type="remove" data-prdid="{{cur_prdid}}">-</view>
+          <view class="prdcartnum">{{cur_addsku_num}}</view>
+          <view class="addnumbtn bg_liner_orange"  bindtap="change_skunum" data-type="add" data-prdid="{{cur_prdid}}">+</view>
+        </view>
+      </view>
+      <view class='bg_liner_orange addskubtn' bindtap='addsku' data-prdid="{{cur_prdid}}">
+        <view class="iconimage"><image src="../../images/orderfood.png"></image></view>添加
+      </view>
+    </view>
+  </view>
+  <!-- 选择sku --- E -->
+</view>

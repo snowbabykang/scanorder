@@ -1,0 +1,4 @@
+/* pages/paysuccess/paysuccess.wxss */
+.infotitle{color:#999;padding-right: 16rpx;}
+.extra_info{text-align: center;padding-top: 20rpx;color: #999;font-size: 24rpx;}
+.extra_info .btn-link{display: inline-block;color:#208bf7;}

@@ -1,0 +1,18 @@
+{
+  "pages":[
+    "pages/order/order",
+    "pages/cart/cartlist",
+    "pages/prdlist/prdlist",
+    "pages/index/index",
+    "pages/orderlist/orderlist",
+    "pages/orderdetail/orderdetail",
+    "pages/paysuccess/paysuccess"
+  ],
+  "window":{
+    "enablePullDownRefresh" : true,
+    "backgroundTextStyle":"light",
+    "navigationBarBackgroundColor": "#ff5000",
+    "navigationBarTitleText": "扫码点餐"
+  }
+ 
+}

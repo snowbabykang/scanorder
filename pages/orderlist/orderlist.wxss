@@ -1,0 +1,32 @@
+/* pages/orderlist/orderlist.wxss */
+.weui-navbar{background: #fff;border-bottom: none;box-shadow: 0 4rpx 20rpx -6rpx rgba(0,0,0,0.1);}
+.weui-navbar__slider{width:3em;}
+.weui-navbar__item.weui-bar__item_on {color:#FE6A3B;}
+.weui-navbar__slider{background-color:#FE6A3B;}
+.orderfood{
+  position: fixed;
+  bottom: 100rpx;
+  right:40rpx;
+  z-index: 803;
+  width: 104rpx;
+  height: 104rpx;
+  border-radius: 100%;
+  text-align: center;
+  box-shadow: 0 0 8px rgba(255,80,0,0.3);
+}
+.orderfood_icon{
+  width: 60rpx;
+  height:60rpx;
+  line-height:60rpx;
+  margin:0 auto;
+  padding:20rpx 0 22rpx 0;
+}
+.orderlist{margin-top: 20rpx;}
+.orderstoreinfo{padding:20rpx 30rpx;color:#999;}
+.storeimg{width:40rpx;height: 40rpx;border-radius: 100%;vertical-align: middle;margin-right: 4rpx;}
+.orderstate{text-align: right;line-height: 40rpx;}
+.orderprd_list{padding:20rpx 30rpx;color:#999;background: #f5f5f5;}
+.orderprd_list .orderprd_price{width:140rpx;text-align: right;}
+.orderprd_list .orderprd_num{width:60rpx;padding-left: 20rpx;}
+.order_paybtn{padding:20rpx 30rpx;text-align: right;}
+.order_paybtn .weui-btn{background: #ff5000;color:#fff;}

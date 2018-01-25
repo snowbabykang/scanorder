@@ -1,0 +1,35 @@
+/* pages/order/order.wxss */
+.page .content{
+    position: absolute;
+    top: 0rpx;
+    bottom: 170rpx;
+    left: 0;
+    right: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+.orderprd_list{padding:20rpx 30rpx;color:#999;}
+
+.orderprd_list .orderprd_num{width:100rpx;}
+.orderprd_list .orderprd_price{width:140rpx;text-align: right;}
+
+.smallgray{color:#999;font-size: 24rpx;}
+.discountinfo{color:#ff5000;font-size: 24rpx;opacity: 0.5;padding-bottom: 8rpx;}
+.all_amount{padding-right: 2rpx;font-size: 36rpx;}
+
+.fix_bottom{position: fixed;bottom: 0;left: 0;right: 0;}
+.fix_bottom .tips{
+  height: 48prx;line-height: 48rpx;font-size: 20rpx;background: #FFF8D6;color:#C3A86C;padding-left: 10px;
+}
+.fix_bottom .tips icon{line-height:1;}
+.fix_bottom .buybtn{
+  height: 96prx;line-height: 96rpx;font-size: 32rpx;background: #1DAC18;color:#fff;text-align: center;
+}
+.couponmodal{position: fixed;left: 0;top: 0;width: 100%;height: 100%;z-index: 900;
+background: #f1f2f6;overflow: auto;-webkit-overflow-scrolling: touch;}
+.couponmodal.out{display: none;visibility: hidden;}
+.couponmodal.in{display: block;}
+.couponmodal .list_title{background-color: #1e1d22;color: #fff;}
+.couponmodal .content {position: absolute;top: 130rpx;bottom: 0;left: 0;right: 0;
+    overflow-y: auto;-webkit-overflow-scrolling: touch;
+}

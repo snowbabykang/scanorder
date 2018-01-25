@@ -1,0 +1,122 @@
+<!--pages/order/order.wxml-->
+<import src="../../toast/wetoast.wxml"/>
+<template is="wetoast" data="{{...__wetoast__}}"/>
+
+<view class="page" wx:if="{{is_orderinfo}}">
+  <view class="content">
+    <view class="weui-toptips weui-toptips_warn" wx:if="{{showTopTips}}">错误提示</view>
+    <view class="weui-cell list_title">
+      <view class="weui-cell__bd">{{storeinfo.name}}</view>
+      <view class="weui-cell__ft">桌号：{{table_number}}号</view>
+    </view>
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-flex orderprd_list" style="color:#333;">
+        <view class="weui-flex__item orderprd_name">共{{total_num}}份</view>
+        <view class="weui-flex__item orderprd_price">总价：￥{{total_fee}}</view>
+      </view>
+      <view class="weui-flex orderprd_list" wx:for="{{orderprdlist}}" wx:key="skuid">
+        <view class="weui-flex__item orderprd_name">{{item.title}}</view>
+        <view class="orderprd_num" wx:if="{{item.num}}">x{{item.num}}</view>
+        <view class="orderprd_price">￥{{item.price}}</view>
+      </view>
+    </view>
+    <view class="weui-cells">
+      <view class="weui-cell">
+          <view class="weui-cell__bd">满减优惠</view>
+          <view class="weui-cell__ft">
+              <text class="primary">- {{total_diff}}元</text>
+          </view>
+      </view>
+      <view class="weui-cell weui-cell_access" bindtap='showcouponModal'>
+          <view class="weui-cell__bd">优惠券 </view>
+          <view class="weui-cell__ft weui-cell__ft_in-access">
+            <text class="smallgray" wx:if="{{now_couponinfo.key && now_couponinfo.key !== '0'}}">{{now_couponinfo.FullReduce - 0 ? '满'+ now_couponinfo.FullReduce + '减' : '立减'}}<text class="primary">{{now_couponinfo.money}}</text>元{{now_couponinfo.openType == 1 ? '(整店)' : '(单品)'}}</text>
+            <text class="smallgray" wx:else>不使用优惠券</text>
+          </view>
+      </view>
+      <view class="weui-cell" style="padding:0;display:none;">
+        <view class="weui-cell__bd">
+          <checkbox-group bindchange="balanceChange">
+            <label class="weui-cell weui-check__label">
+                <checkbox class="weui-check" value="{{balance.value}}" checked="{{balance.checked}}"/>
+                <view class="weui-cell__bd">是否使用余额 <text class="smallgray">（现有余额{{balance.money}}元）</text></view>
+                <view class="weui-cell__hd weui-check__hd_in-checkbox">
+                    <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{!balance.checked}}"></icon>
+                    <icon class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{balance.checked}}"></icon>
+                </view>
+            </label>
+          </checkbox-group>
+        </view>
+      </view>
+      <view class="weui-cell" style="align-items:flex-end">
+          <view class="weui-cell__bd">实际付款</view>
+          <view class="weui-cell__ft">
+              <!-- <view class="discountinfo">会员优惠 -0.2元</view> -->
+              <view class="primary"> <text class="all_amount">{{active_fee}}</text> 元</view>
+          </view>
+      </view>
+    </view>
+    <view class="weui-cells">
+      <radio-group bindchange="paytypeChange">
+          <label class="weui-cell weui-check__label" wx:for="{{payItems}}" wx:key="value">
+              <radio class="weui-check" value="{{item.value}}" checked="{{item.checked}}"/>
+              <view class="weui-cell__bd">{{item.name}}</view>
+              <view class="weui-cell__ft weui-cell__ft_in-radio">
+                  <icon class="weui-icon-radio" type="circle" size="23" wx:if="{{!item.checked}}"></icon>
+                  <icon class="weui-icon-radio" type="success" size="23" wx:if="{{item.checked}}"></icon>
+              </view>
+          </label>
+      </radio-group>
+    </view>
+  </view>
+  <view class="fix_bottom">
+      <view class="tips">
+        <icon type="info_circle" size="14" color="#C3A86C"></icon>
+        支付时请确保服务员在您身边，方便确认您成功买单
+      </view>
+      <view class="buybtn" bindtap='payorder'>微信买单</view>
+    </view>
+</view>
+<view wx:else class="page">
+    <view class="weui-msg">
+        <view class="weui-msg__icon-area">
+            <icon type="warn" size="93"></icon>
+        </view>
+        <view class="weui-msg__text-area">
+            <view class="weui-msg__title">下单失败</view>
+            <view class="weui-msg__desc">{{err_msg}}</view>
+        </view>
+        <view class="weui-msg__opr-area">
+            <view class="weui-btn-area">
+                <navigator open-type="navigateBack"><button class="weui-btn" type="default">返回购物车</button></navigator>
+            </view>
+        </view>
+    </view>
+</view>
+
+<!-- 优惠券弹层 -->
+<view class="couponmodal popup slideUpAnimate {{showcoupon ? 'in' : 'out'}}">
+  <view class="weui-cell list_title">
+    <view class="weui-cell__bd">请选择优惠券</view>
+    <view class="weui-cell__ft">
+      <button class="weui-btn" type="default" size="mini" bindtap="hidecouponModal">取消</button>
+    </view>
+  </view>
+  <view class="content">
+    <scroll-view scroll-y style="height: 100%" lower-threshold="100">  
+      <view class="weui-cells weui-cells_after-title" wx:if="{{couponlist}}">
+        <radio-group bindchange="selectcoupon">
+          <label class="weui-cell weui-check__label" wx:for="{{couponlist}}" wx:key="key">
+              <radio class="weui-check" value="{{item.key}}" checked="{{item.checked}}"/>
+              <view class="weui-cell__bd" wx:if="{{item.key !== '0'}}">{{item.FullReduce - 0 ? '满'+ item.FullReduce + '减' : '立减'}}{{item.money}}元{{item.openType == 1 ? '(整店)' : '(单品)'}}</view>
+              <view class="weui-cell__bd" wx:else>不使用优惠券</view>
+              <view class="weui-cell__ft weui-cell__ft_in-radio">
+                  <icon class="weui-icon-radio" type="success_no_circle" size="23" wx:if="{{item.checked}}"></icon>
+              </view>
+          </label>
+        </radio-group>
+      </view>
+    </scroll-view>
+  </view>
+</view>
+
