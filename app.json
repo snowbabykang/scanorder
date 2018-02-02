@@ -1,12 +1,12 @@
 {
   "pages":[
-    "pages/order/order",
-    "pages/cart/cartlist",
     "pages/prdlist/prdlist",
     "pages/index/index",
+    "pages/cart/cartlist",
+    "pages/order/order",
+    "pages/paysuccess/paysuccess",
     "pages/orderlist/orderlist",
-    "pages/orderdetail/orderdetail",
-    "pages/paysuccess/paysuccess"
+    "pages/orderdetail/orderdetail"
   ],
   "window":{
     "enablePullDownRefresh" : true,

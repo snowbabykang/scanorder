@@ -1,36 +1,31 @@
 // pages/orderdetail/orderdetail.js
+var api = require('../../utils/api.js');
+var pay = require('../../utils/pay.js');
+var app = getApp();
 Page({
-
   /**
    * 页面的初始数据
    */
   data: {
     orderid : "",    //订单id
-    orderlist: {
-      id: 1,
-      store: {
-        id: 1,
-        logo: "../../images/none.png",
-        name: "门店名称"
-      },
-      orderstate: "待付款",
-      orderprdlist: [
-        { "name": "湘西外婆菜扣肉", "num": "1", "price": "26.00" },
-        { "name": "罐罐红烩牛肉", "num": "10", "price": "132.00" }
-      ],
-      total_num: 11,
-      total_fee: '1346.00'
-    }
+    getorderinfo_url: '/storeweixin/applet/show?key=orderdetail',
+    orderinfo: "",
+    err_msg : '',   //错误信息
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-  console.log(options)
-    this.setData({
-      orderid : options.id
+    var that = this;
+    wx.showLoading({
+      title: '加载中',
     })
+    that.setData({
+      sid: app.globalData.sid,
+      orderid : options.tid
+    })
+   that.getorderinfo();
   },
 
   /**
@@ -80,5 +75,36 @@ Page({
    */
   onShareAppMessage: function () {
   
+  },
+  //获取订单详情
+  getorderinfo : function(){
+    var that = this;
+    api.post({
+      url: that.data.getorderinfo_url,
+      data: {
+        sid: that.data.sid,
+        tid: that.data.orderid
+      },
+      success: data => {
+        if (data.errcode == 0) {
+          that.setData({
+            orderinfo: data.data,
+          });
+        } else {
+          that.setData({
+            err_msg: data.errmsg,
+          });
+        }
+      },
+      complete: function () {
+        wx.hideLoading();
+      }
+    });
+  },
+  //去支付
+  payorder: function () {
+    var that = this;
+    pay.pre_payorder(that.data.orderid, that.data.sid);
   }
+
 })

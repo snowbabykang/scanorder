@@ -6,7 +6,7 @@
 .orderfood{
   position: fixed;
   bottom: 100rpx;
-  right:40rpx;
+  left:40rpx;
   z-index: 803;
   width: 104rpx;
   height: 104rpx;
@@ -30,3 +30,6 @@
 .orderprd_list .orderprd_num{width:60rpx;padding-left: 20rpx;}
 .order_paybtn{padding:20rpx 30rpx;text-align: right;}
 .order_paybtn .weui-btn{background: #ff5000;color:#fff;}
+
+.weui-tab{top:0;bottom:0;left:0;right:0;}
+.weui-tab__panel{position: absolute;top:50px;bottom:0;width:100%;padding:0;height:auto;}

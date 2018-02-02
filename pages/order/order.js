@@ -1,8 +1,8 @@
 // pages/order/order.js
 var api = require('../../utils/api.js');
+var pay = require('../../utils/pay.js');   //预下单调取微信支付
 var app = getApp();
 Page({
-
   /**
    * 页面的初始数据
    */
@@ -38,6 +38,9 @@ Page({
     active_fee : '',    //实际付款
     total_diff : '0.00',    //商品满减总额
     before_coupon_pay : '',    //商品总金额-商品满减总额
+    payorder_url: '/storeweixin/applet/show?key=placeOrder',     //生成订单链接
+    is_payorder : false,     //是否已经生成订单（增加该字段主要处理调取微信支付失败的处理，避免重复下单）
+    payorder_id : "",        //如果已经生成订单，就存储订单id，下次预下单时使用
   },
 
   /**
@@ -50,8 +53,8 @@ Page({
       sid: app.globalData.sid,
       table_number: app.globalData.table_number,
       storeinfo: app.globalData.store,
-      getorderinfo_params: 'num_iid=526937:548622:526936&num=2:1:2&sku_id=1513133103:1513220290:1513069782',
-      //getorderinfo_params: 'num_iid=' + options.num_iid + '&num=' + options.num + '&sku_id=' + options.sku_id
+      //getorderinfo_params: 'num_iid=526937:548622:526936&num=2:1:2&sku_id=1513133103:1513220290:1513069782',
+      getorderinfo_params: 'num_iid=' + options.num_iid + '&num=' + options.num + '&sku_id=' + options.sku_id
     })
     wx.showLoading({
       title: '加载中',
@@ -262,36 +265,50 @@ Page({
   //去支付
   payorder:function(){
     var that = this;
-    wx.showLoading({
-      title: '生成订单中...',
-    })
-    var CouponsId = that.data.now_couponinfo.key ? that.data.now_couponinfo.key : "";
-    api.post({
-      url: '/storeweixin/applet/show?key=placeOrder&' + that.data.getorderinfo_params,
-      data: {
-        sid: that.data.sid,
-        table_number: that.data.table_number,
-        store_id: that.data.storeinfo.id,
-        CouponsId: CouponsId,
-        balance:0,
-        pay_type: "zfb"
-      },
-      success: data => {
-        console.log(data);
-        if (data.errcode == 0) {
-          var orderid = data.order_id;
-          console.log("订单ID"+orderid);
-        } else {
-          
+    if (that.data.is_payorder){   //已下单，直接预下单
+     // that.pre_payorder(that.data.payorder_id);
+      pay.pre_payorder(that.data.payorder_id,that.data.sid);
+    }else{
+      wx.showLoading({
+        title: '生成订单中...',
+      })
+      var CouponsId = that.data.now_couponinfo.key ? that.data.now_couponinfo.key : "";
+      api.post({
+        url: that.data.payorder_url+'&' + that.data.getorderinfo_params,
+        data: {
+          sid: that.data.sid,
+          table_number: that.data.table_number,
+          store_id: that.data.storeinfo.id,
+          CouponsId: CouponsId,
+          balance:0,
+          pay_type: "zfb"
+        },
+        success: data => {
+          if (data.errcode == 0) {
+            var orderid = data.order_id;
+            console.log("订单ID--"+orderid);
+            //that.pre_payorder(orderid);
+            pay.pre_payorder(orderid, that.data.sid);
+            that.setData({
+              is_payorder: true,
+              payorder_id: orderid
+            });
+          } else {    //生成订单失败，再重新生成订单
+            wx.showModal({
+              title: '提示',
+              content: data.errmsg,
+              showCancel: false,
+              success: function (res) {
+                that.setData({
+                  is_payorder: false,
+                  payorder_id : ""
+                });
+              }
+            })
+          }
         }
-      },
-      complete: function () {
-        wx.hideLoading();
-      }
-    });
-    return false;
-    wx.navigateTo({
-      url: '../paysuccess/paysuccess'
-    })
+      });
+    }
   }
+  
 })

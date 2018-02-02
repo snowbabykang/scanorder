@@ -1,4 +1,6 @@
 // pages/orderlist/orderlist.js
+var api = require('../../utils/api.js');
+var app = getApp();
 var sliderWidth = 48;
 Page({
 
@@ -6,49 +8,23 @@ Page({
    * 页面的初始数据
    */
   data: {
-    tabs: ["待付款", "已完成", "所有"],
+    sid : '',
+    tabs: ["待付款", "已完成"],
     activeIndex: 0,
     sliderOffset: 0,
     sliderLeft: 0,
-    orderlist : [{
-      id : 1,
-      store : {
-        id: 1,
-        logo: "../../images/none.png",
-        name: "门店名称"
-      },
-      orderstate : "待付款",
-      orderprdlist: [
-        { "name": "湘西外婆菜扣肉", "num": "1", "price": "26.00" },
-        { "name": "罐罐红烩牛肉", "num": "10", "price": "132.00" }
-      ],
-      total_num : 11,
-      total_fee : '1346.00'
-    }, {
-      id: 2,
-      store: {
-        id: 1,
-        logo: "../../images/none.png",
-        name: "门店名称"
-      },
-      orderstate: "待付款",
-      orderprdlist: [
-        { "name": "湘西外婆菜扣肉", "num": "1", "price": "26.00" },
-        { "name": "罐罐红烩牛肉", "num": "10", "price": "132.00" }
-      ],
-      total_num: 11,
-      total_fee: '1346.00'
-    }],
-    
+    orderlist_url: '/storeweixin/applet/show?key=orderlist', 
+    orderlist : []
   },
-  
-  
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function () {
     var that = this;
+    wx.showLoading({
+      title: '加载中',
+    })
     wx.getSystemInfo({
       success: function (res) {
         that.setData({
@@ -57,6 +33,10 @@ Page({
         });
       }
     });
+    that.setData({
+      sid: app.globalData.sid
+    })
+    that.getorderlist(1);
   },
 
   /**
@@ -112,5 +92,35 @@ Page({
       sliderOffset: e.currentTarget.offsetLeft,
       activeIndex: e.currentTarget.id
     });
+    if (e.currentTarget.id == 0){
+      var ordertype = 1;
+    }else{
+      var ordertype = 5;
+    }
+    this.getorderlist(ordertype);
+  },
+  getorderlist : function(ordertype){
+    var that = this;
+    api.post({
+      url: that.data.orderlist_url,
+      data: {
+        sid: that.data.sid,
+        type: ordertype
+      },
+      success: data => {
+        if (data.errcode == 0) {
+          that.setData({
+            orderlist: data.data,
+          });
+        } else {
+          
+        }
+      },
+      complete: function () {
+        wx.hideLoading();
+      }
+    });
   }
+
+
 })
