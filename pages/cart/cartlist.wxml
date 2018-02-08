@@ -30,7 +30,7 @@
               <view wx:if="{{item.quantity == 0}}" class="unsale"></view>
               <view style="{{item.txtStyle}}"  bindtouchstart="touchS" bindtouchmove="touchM" bindtouchend="touchE"  data-index="{{index}}" data-prd="{{prdindex}}" class="weui-media-box weui-media-box_appmsg cart_item_top">
                 <view class="weui-media-box__hd weui-media-box__hd_in-appmsg prdimg">
-                    <image class="weui-media-box__thumb" src="{{item.pic_url}}" mode="aspectFill" binderror="errorFunction"/>
+                    <image class="weui-media-box__thumb" src="{{item.pic_url}}_300x300.jpg" mode="aspectFill" binderror="errorFunction"/>
                 </view>
                 <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
                     <view class="weui-media-box__title item-subtitle">{{item.title}}</view>

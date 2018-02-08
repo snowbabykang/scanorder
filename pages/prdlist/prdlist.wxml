@@ -6,7 +6,7 @@
     <!-- 头部导航 --- S -->
     <view class="cont-head bg_liner_orange weui-cell">
       <view class="weui-cell__hd">
-        <view class="storelogo"><image src="{{store.logo}}" mode="aspectFit" binderror="errorFunction"></image></view>
+        <view class="storelogo"><image src="{{store.logo}}_300x300.jpg" mode="aspectFit" binderror="errorFunction"></image></view>
       </view>
       <view class="weui-cell__bd storename">{{store.name}}</view>
       <navigator class="myorder" url="../orderlist/orderlist">
@@ -27,7 +27,7 @@
             <view class="prd_list" wx:if="{{showprdlist}}">
               <view class="weui-media-box weui-media-box_appmsg prdlist_item" wx:for="{{prdlist}}" wx:key="prd_id" data-id="{{item.prd_id}}">
                   <view class="weui-media-box__hd weui-media-box__hd_in-appmsg prdimg">
-                      <image class="weui-media-box__thumb" src="{{item.prd_info.pic_url}}" mode="aspectFit" binderror="errorFunction"/>
+                      <image class="weui-media-box__thumb" src="{{item.prd_info.pic_url}}_300x300.jpg" mode="aspectFit" binderror="errorFunction"/>
                   </view>
                   <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
                       <view class="weui-media-box__title item-subtitle">{{item.prd_info.title}}</view>

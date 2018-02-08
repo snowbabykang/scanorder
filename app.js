@@ -3,34 +3,30 @@ let { WeToast } = require('toast/wetoast.js')
 App({
   WeToast,
   onLaunch: function () {
-    // 展示本地存储能力
-    var logs = wx.getStorageSync('logs') || []
-    logs.unshift(Date.now())
-    wx.setStorageSync('logs', logs)
+    
 
     // 登录
-    wx.login({
-      success: res => {
-        console.log(res.code);
-         // 发送 res.code 到后台换取 openId, sessionKey, unionId
-        wx.request({
-          url: 'https://api.weixin.qq.com/sns/jscode2session',
-          data: {
-            "appid": 'wxccc4a9ebd9e90eb2',
-            "secret": 'e5bc614d5ebf0b34299977fb52bf0a11',
-            "js_code": res.code,
-            //"grant_type" : authorization_code
-          },
-          header: {
-            'content-type': 'application/x-www-form-urlencoded',
-          },
-          success: function (res) {
-            console.log(res.data)
-          }
-        })
+    // wx.login({
+    //   success: res => {
+    //     console.log(res.code);
+    //      // 发送 res.code 到后台换取 openId, sessionKey, unionId
+    //     wx.request({
+    //       url: 'https://api.weixin.qq.com/sns/jscode2session',
+    //       data: {
+    //         "appid": 'wxccc4a9ebd9e90eb2',
+    //         "secret": 'e5bc614d5ebf0b34299977fb52bf0a11',
+    //         "js_code": res.code,
+    //       },
+    //       header: {
+    //         'content-type': 'application/x-www-form-urlencoded',
+    //       },
+    //       success: function (res) {
+    //         console.log(res.data)
+    //       }
+    //     })
        
-      }
-    })
+    //   }
+    // })
     // 获取用户信息
     wx.getSetting({
       success: res => {
